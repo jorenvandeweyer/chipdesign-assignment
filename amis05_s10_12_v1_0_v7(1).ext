@@ -1,0 +1,63 @@
+#                 File: ame05.ext
+#                  For: Extract definition file
+#               Vendor: Alcatel Microelectronic 
+#           Technology: 0.5 um CMOS analog (C05M-A)
+#    Technology Setup : in file ame05_N.tdb 
+#      Test/Demo Suite: in cell: EXT_ALL
+#
+# Copyright (c) 1998
+# Fraunhofer Gesellschaft FhG-IIS, Erlangen, Germany
+# Tanner Research, Inc. All rights reserved
+#
+# Version: 		2.0  
+# Date:			25/Jan/2000
+#
+# implemented are: 	NMOS transistor with PolySi gate
+# 			PMOS transistor with PolySi gate
+# 			Poly-Poly capacitor
+# 			n-channel gate capacitor
+# 			p-channel gate capacitor
+# 			N Well resistor
+# 			N+ Diffusion resistor
+# 			P+ Diffusion resistor
+# 			MOPO resistor
+# 			HIPO resistor
+#
+# not implemented: 	PNP bipolar transistor
+# 			Junction capacitances
+# 			Any diodes
+#
+# ****************************************************************************
+#
+connect(n well wire, ndiff, ndiff)
+connect(subs, pdiff, pdiff)
+#connect(allsubs, subs, subs)
+connect(ndiff, METAL1, CON_N+_ACTIVE)
+connect(pdiff, METAL1, CON_P+_ACTIVE)
+connect(poly wire, METAL1, CON_POLYSILICON)
+connect(poly0 wire, METAL1, CON_POLY0)
+connect(capa wire, METAL1, CON_CAPA_PLATE)
+connect(METAL1, METAL2, VIA1)
+connect(METAL2, METAL3, VIA2)
+#connect(LPNP emitter, pdiff, LPNP emitter)
+#connect(LPNP collector, pdiff, LPNP collector)
+
+# PMOS transistor with PolySi gate
+device = MOSFET(
+            RLAYER=ptran;
+            Drain=pdiff, WIDTH;
+            Gate=poly wire;
+            Source=pdiff, WIDTH;
+            Bulk=n well wire;
+            MODEL=EP;
+            )
+
+# NMOS transistor with PolySi gate
+device = MOSFET(
+            RLAYER=ntran;  
+            Drain=ndiff, WIDTH;
+            Gate=poly wire;   
+            Source=ndiff, WIDTH;
+            Bulk=subs;
+            MODEL=EN;
+            )
